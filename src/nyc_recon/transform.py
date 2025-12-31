@@ -11,10 +11,12 @@ def clean_payroll_data(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: The cleaned payroll DataFrame.
     """
 
+    df = df.copy()
+
     return (
         df
         .assign(
-            agency_key=lambda d: d["Agency"].apply(normalize_agency_name),
+            agency_key=lambda d: d["Agency"].map(normalize_agency_name),
             fiscal_year=lambda d: pd.to_numeric(d["FiscalYear"], errors="raise"),
             total_pay=lambda d: pd.to_numeric(
                 d["TotalPay"].astype(str).str.replace("$", "", regex=False).str.replace(",", "", regex=False), 
@@ -37,6 +39,9 @@ def clean_spending_data(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: The cleaned spending DataFrame.
     """
+
+    df = df.copy()
+
     return (
         df
         .assign(
